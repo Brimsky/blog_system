@@ -28,6 +28,5 @@ class Post extends Model
         return $query->where('title', 'LIKE', "%{$search}%")
                     ->orWhere('body', 'LIKE', "%{$search}%");
     }
-
     public function getRouteKeyName() { return 'slug'; }
 }

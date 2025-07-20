@@ -8,15 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('post_category', function (Blueprint $table) {
-            $table->foreignId('post_id')->constrained()->onDelete('cascade');
+        // Change table name from 'post_category' to 'category_post' (Laravel convention)
+        Schema::create('category_post', function (Blueprint $table) {
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->primary(['post_id', 'category_id']);
+            $table->foreignId('post_id')->constrained()->onDelete('cascade');
+            $table->primary(['category_id', 'post_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('post_category');
+        Schema::dropIfExists('category_post');
     }
 };

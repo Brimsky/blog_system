@@ -1,5 +1,8 @@
 <?php
 
+// Replace your create_blog_core_tables migration with this:
+// database/migrations/2025_07_20_162303_create_blog_core_tables.php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -26,7 +29,10 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['status', 'created_at']);
-            $table->fullText(['title', 'body']);
+
+            if (config('database.default') === 'mysql') {
+                $table->fullText(['title', 'body']);
+            }
         });
 
         Schema::create('comments', function (Blueprint $table) {
