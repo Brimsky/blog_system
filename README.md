@@ -13,6 +13,7 @@ php artisan key:generate
 touch database/database.sqlite
 php artisan migrate
 php artisan serve
+php artisan db:seed
 ```
 
 Open `http://localhost:8000` - done.
