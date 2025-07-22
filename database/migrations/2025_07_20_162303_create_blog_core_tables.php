@@ -1,8 +1,5 @@
 <?php
 
-// Replace your create_blog_core_tables migration with this:
-// database/migrations/2025_07_20_162303_create_blog_core_tables.php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,6 +21,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('body');
+            $table->string('excerpt', 255)->nullable();
             $table->enum('status', ['draft', 'published'])->default('draft');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();

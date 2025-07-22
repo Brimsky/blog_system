@@ -12,12 +12,6 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth')->except(['index', 'show']);
-        $this->middleware('post.owner')->only(['edit', 'update', 'destroy']);
-    }
-
     public function index(Request $request)
     {
         $query = Post::with(['user', 'categories'])
@@ -55,8 +49,8 @@ class PostController extends Controller
 
         $post = Post::create($validated);
 
-        if ($request->has('categories')) {
-            $post->categories()->attach($request->categories);
+        if ($request->has('category_id')) {
+            $post->categories()->sync([$request->category_id]);
         }
 
         return redirect()
@@ -77,15 +71,30 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        $categories = Category::all();
-        $selectedCategories = $post->categories->pluck('id')->toArray();
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'You can only edit your own posts.');
+        }
 
-        return view('posts.edit', compact('post', 'categories', 'selectedCategories'));
+        $categories = Category::all();
+        $selectedCategory = $post->categories->first()->id ?? $categories->first()->id ?? null;
+
+        return view('posts.edit', compact('post', 'categories', 'selectedCategory'));
     }
 
-    public function update(UpdatePostRequest $request, Post $post)
+    public function saveDraft(Request $request, Post $post)
     {
-        $validated = $request->validated();
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'You can only edit your own posts.');
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'excerpt' => 'nullable|string',
+            'body' => 'required|string|min:10',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $validated['status'] = 'draft';
 
         if ($post->title !== $validated['title']) {
             $validated['slug'] = Str::slug($validated['title']);
@@ -93,19 +102,51 @@ class PostController extends Controller
 
         $post->update($validated);
 
-        if ($request->has('categories')) {
-            $post->categories()->sync($request->categories);
-        } else {
-            $post->categories()->detach();
+        if ($request->has('category_id') && $request->category_id) {
+            $post->categories()->sync([$request->category_id]);
         }
 
         return redirect()
-            ->route('posts.show', $post)
-            ->with('success', 'Post updated successfully!');
+            ->route('posts.show', $post->fresh()->slug)
+            ->with('success', 'Post saved as draft successfully!');
+    }
+
+    public function publishPost(Request $request, Post $post)
+    {
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'You can only edit your own posts.');
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'excerpt' => 'nullable|string',
+            'body' => 'required|string|min:10',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $validated['status'] = 'published';
+
+        if ($post->title !== $validated['title']) {
+            $validated['slug'] = Str::slug($validated['title']);
+        }
+
+        $post->update($validated);
+
+        if ($request->has('category_id') && $request->category_id) {
+            $post->categories()->sync([$request->category_id]);
+        }
+
+        return redirect()
+            ->route('posts.show', $post->fresh()->slug)
+            ->with('success', 'Post published successfully!');
     }
 
     public function destroy(Post $post)
     {
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'You can only delete your own posts.');
+        }
+
         $post->delete();
 
         return redirect()

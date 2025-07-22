@@ -4,15 +4,12 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Welcome Header -->
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Welcome back, {{ Auth::user()->name }}!</h1>
         <p class="mt-2 text-gray-600">Here's what's happening with your blog</p>
     </div>
 
-    <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <!-- Total Posts -->
         <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -29,7 +26,6 @@
             </div>
         </div>
 
-        <!-- Published Posts -->
         <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -46,7 +42,6 @@
             </div>
         </div>
 
-        <!-- Draft Posts -->
         <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -63,7 +58,6 @@
             </div>
         </div>
 
-        <!-- Total Comments -->
         <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -81,7 +75,6 @@
         </div>
     </div>
 
-    <!-- Quick Actions -->
     <div class="mb-8">
         <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
         <div class="flex flex-wrap gap-4">
@@ -113,7 +106,6 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Recent Posts -->
         <div class="bg-white rounded-lg shadow-md border border-gray-200">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
@@ -178,7 +170,6 @@
             </div>
         </div>
 
-        <!-- Recent Comments -->
         <div class="bg-white rounded-lg shadow-md border border-gray-200">
             <div class="p-6 border-b border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-900">Recent Comments</h3>
@@ -216,42 +207,6 @@
                         <p class="mt-1 text-sm text-gray-500">Your comments on posts will appear here.</p>
                     </div>
                 @endif
-            </div>
-        </div>
-    </div>
-
-    <!-- Activity Summary -->
-    <div class="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <h3 class="text-lg font-semibold text-gray-900">Keep Writing!</h3>
-                <p class="text-gray-600 mt-1">
-                    @if($stats['published_posts'] === 0)
-                        You haven't published any posts yet. Start sharing your ideas with the world!
-                    @elseif($stats['published_posts'] < 5)
-                        You're off to a great start with {{ $stats['published_posts'] }} published {{ Str::plural('post', $stats['published_posts']) }}!
-                    @else
-                        Amazing! You've published {{ $stats['published_posts'] }} posts. Keep the momentum going!
-                    @endif
-                </p>
-            </div>
-            <div class="flex space-x-3">
-                @if($stats['draft_posts'] > 0)
-                    <a href="{{ route('posts.my-posts') }}?status=draft"
-                       class="inline-flex items-center px-4 py-2 bg-yellow-600 text-white text-sm font-medium rounded-lg hover:bg-yellow-700">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                        </svg>
-                        Finish {{ $stats['draft_posts'] }} {{ Str::plural('Draft', $stats['draft_posts']) }}
-                    </a>
-                @endif
-                <a href="{{ route('posts.create') }}"
-                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    New Post
-                </a>
             </div>
         </div>
     </div>

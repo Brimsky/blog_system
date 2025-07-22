@@ -16,9 +16,9 @@ class StorePostRequest extends FormRequest
         return [
             'title' => 'required|string|max:255|min:3',
             'body' => 'required|string|min:10',
+            'excerpt' => 'nullable|string|max:255',
             'status' => 'required|in:draft,published',
-            'categories' => 'nullable|array',
-            'categories.*' => 'exists:categories,id'
+            'category_id' => 'required|integer|exists:categories,id',
         ];
     }
 
@@ -30,10 +30,12 @@ class StorePostRequest extends FormRequest
             'title.max' => 'Post title cannot exceed 255 characters.',
             'body.required' => 'Post content is required.',
             'body.min' => 'Post content must be at least 10 characters.',
+            'excerpt.max' => 'Excerpt cannot exceed 255 characters.',
             'status.required' => 'Post status is required.',
             'status.in' => 'Post status must be either draft or published.',
-            'categories.array' => 'Categories must be an array.',
-            'categories.*.exists' => 'Selected category does not exist.'
+            'category_id.required' => 'Category is required.',
+            'category_id.integer' => 'Category must be a valid selection.',
+            'category_id.exists' => 'Selected category does not exist.',
         ];
     }
 

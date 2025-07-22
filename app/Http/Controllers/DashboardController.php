@@ -1,16 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $user = Auth::user();
@@ -34,6 +29,13 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        return view('dashboard', compact('stats', 'recent_posts', 'recent_comments'));
+        $categories = Category::all();
+
+        $posts = $user->posts()
+            ->with('categories')
+            ->latest()
+            ->paginate(9);
+
+        return view('posts.dashboard', compact('stats', 'recent_posts', 'recent_comments', 'categories', 'posts'));
     }
 }

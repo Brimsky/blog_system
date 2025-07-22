@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Category Header -->
     <div class="mb-8 text-center">
         <div class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,7 +20,6 @@
         </div>
     </div>
 
-    <!-- Breadcrumb -->
     <nav class="flex mb-8" aria-label="Breadcrumb">
         <ol class="flex items-center space-x-4">
             <li>
@@ -53,14 +51,11 @@
         </ol>
     </nav>
 
-    <!-- Posts Grid -->
     @if($posts->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
             @foreach($posts as $post)
                 <article class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition duration-300 ease-in-out">
-                    <!-- Post Header -->
                     <div class="p-6">
-                        <!-- Categories -->
                         @if($post->categories->count() > 0)
                             <div class="flex flex-wrap gap-2 mb-3">
                                 @foreach($post->categories as $postCategory)
@@ -72,7 +67,6 @@
                             </div>
                         @endif
 
-                        <!-- Title -->
                         <h2 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
                             <a href="{{ route('posts.show', $post) }}"
                                class="hover:text-blue-600 transition duration-150 ease-in-out">
@@ -80,12 +74,10 @@
                             </a>
                         </h2>
 
-                        <!-- Excerpt -->
                         <p class="text-gray-600 mb-4 line-clamp-3">
                             {{ Str::limit(strip_tags($post->body), 150) }}
                         </p>
 
-                        <!-- Post Meta -->
                         <div class="flex items-center justify-between text-sm text-gray-500">
                             <div class="flex items-center space-x-2">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,7 +97,6 @@
                         </div>
                     </div>
 
-                    <!-- Read More Button -->
                     <div class="px-6 pb-6">
                         <a href="{{ route('posts.show', $post) }}"
                            class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition duration-150 ease-in-out">
@@ -119,12 +110,10 @@
             @endforeach
         </div>
 
-        <!-- Pagination -->
         <div class="flex justify-center">
             {{ $posts->links('pagination.custom') }}
         </div>
     @else
-        <!-- No Posts Found -->
         <div class="text-center py-16">
             <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -150,7 +139,6 @@
         </div>
     @endif
 
-    <!-- Other Categories -->
     @php
         $otherCategories = \App\Models\Category::where('id', '!=', $category->id)->withCount('posts')->get();
     @endphp
@@ -177,7 +165,6 @@
     @endif
 </div>
 
-<!-- Custom CSS for line clamping -->
 <style>
     .line-clamp-2 {
         display: -webkit-box;

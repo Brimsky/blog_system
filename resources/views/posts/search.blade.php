@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Search Header -->
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900 mb-2">Search Results</h1>
         <p class="text-lg text-gray-600">
@@ -13,7 +12,6 @@
         </p>
     </div>
 
-    <!-- Search Form -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
         <form action="{{ route('search') }}" method="GET" class="flex flex-col md:flex-row gap-4">
             <div class="flex-1">
@@ -35,14 +33,12 @@
         </form>
     </div>
 
-    <!-- Search Results -->
     @if($posts->count() > 0)
         <div class="space-y-6 mb-8">
             @foreach($posts as $post)
                 <article class="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition duration-300 ease-in-out">
                     <div class="flex flex-col lg:flex-row lg:items-start lg:space-x-6">
                         <div class="flex-1">
-                            <!-- Categories -->
                             @if($post->categories->count() > 0)
                                 <div class="flex flex-wrap gap-2 mb-3">
                                     @foreach($post->categories as $category)
@@ -54,7 +50,6 @@
                                 </div>
                             @endif
 
-                            <!-- Title with highlighting -->
                             <h2 class="text-xl font-bold text-gray-900 mb-3">
                                 <a href="{{ route('posts.show', $post) }}"
                                    class="hover:text-blue-600 transition duration-150 ease-in-out">
@@ -62,7 +57,6 @@
                                 </a>
                             </h2>
 
-                            <!-- Excerpt with highlighting -->
                             <div class="text-gray-600 mb-4">
                                 @php
                                     $excerpt = Str::limit(strip_tags($post->body), 200);
@@ -71,7 +65,6 @@
                                 <p>{!! $highlightedExcerpt !!}</p>
                             </div>
 
-                            <!-- Post Meta -->
                             <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                                 <div class="flex items-center space-x-2">
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,7 +93,6 @@
                             </div>
                         </div>
 
-                        <!-- Read More Button -->
                         <div class="mt-4 lg:mt-0 lg:flex-shrink-0">
                             <a href="{{ route('posts.show', $post) }}"
                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition duration-150 ease-in-out">
@@ -115,12 +107,10 @@
             @endforeach
         </div>
 
-        <!-- Pagination -->
         <div class="flex justify-center">
             {{ $posts->appends(['q' => $searchTerm])->links('pagination.custom') }}
         </div>
     @else
-        <!-- No Results -->
         <div class="bg-white rounded-lg shadow-md border border-gray-200 p-12 text-center">
             <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -131,7 +121,6 @@
                 Try adjusting your search terms or browse our categories.
             </p>
 
-            <!-- Search Suggestions -->
             <div class="mt-6 space-y-4">
                 <div>
                     <h4 class="text-sm font-medium text-gray-900 mb-2">Search Tips:</h4>
@@ -156,7 +145,6 @@
         </div>
     @endif
 
-    <!-- Categories for Alternative Browsing -->
     @if($categories->count() > 0)
         <div class="mt-12 bg-gray-50 rounded-lg p-8">
             <h3 class="text-xl font-bold text-gray-900 mb-6">Browse by Category</h3>
@@ -179,7 +167,6 @@
         </div>
     @endif
 
-    <!-- Popular Searches or Recent Posts -->
     @if($posts->count() === 0)
         @php
             $recentPosts = \App\Models\Post::with(['user', 'categories'])->published()->latest()->take(3)->get();

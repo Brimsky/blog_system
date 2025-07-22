@@ -8,11 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Change table name from 'post_category' to 'category_post' (Laravel convention)
         Schema::create('category_post', function (Blueprint $table) {
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
-            $table->primary(['category_id', 'post_id']);
+            $table->unique(['category_id', 'post_id']);
         });
     }
 
