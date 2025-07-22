@@ -13,25 +13,6 @@
             </p>
         </section>
 
-        <section class="space-y-4">
-            <form method="GET" action="{{ route('posts.index') }}" class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-                <div class="flex flex-wrap gap-2">
-                    <a href="{{ route('posts.index') }}"
-                       class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-colors
-                              {{ !request('category') ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                        All
-                    </a>
-                    @foreach($categories as $category)
-                        <a href="{{ route('posts.index', ['category' => $category->id]) }}"
-                           class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-colors cursor-pointer
-                                  {{ request('category') == $category->id ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                            {{ $category->name }}
-                        </a>
-                    @endforeach
-                </div>
-            </form>
-        </section>
-
         @php
             $featuredPosts = \App\Models\Post::with(['user', 'categories', 'comments'])
                 ->published()
